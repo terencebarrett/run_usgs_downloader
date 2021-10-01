@@ -1,5 +1,5 @@
-Run USGS Downloader
-===================
+USGS Downloader
+===============
 
 Download USGS LiDAR coverage of FIA plots with the packages `USGSlidar` (R) 
 and `pdal` (Python) from a single combined R/Python conda environment. 
@@ -9,8 +9,8 @@ capabilities and for investigating possibilities for productionizing their use.
 
 Tested on Linux (Ubuntu 20), but should be OS-agnostic.
 
-Setting up the USGS Downloader  
-------------------------------
+Setting up USGS Downloader  
+--------------------------
 - Creates a single combined Python/R conda environment used for all steps of the workflow
 
 1. Clone this repo
@@ -22,8 +22,8 @@ Setting up the USGS Downloader
    and not via conda, the preferred way; see https://githubmemory.com/repo/paleolimbot/ggspatial/issues/83
 
 
-Running the USGS Downloader for the example provided - the state of Delaware
-----------------------------------------------------------------------------
+Running USGS Downloader for the example provided - the state of Delaware
+------------------------------------------------------------------------
 1. `$ conda activate usgs_downloader`
 2. `cd` to root of repo
 3. Delete the contents of the repo’s *working* folder (the results of the previous run) -- if want to start fresh
