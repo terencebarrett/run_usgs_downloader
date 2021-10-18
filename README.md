@@ -1,18 +1,18 @@
 USGS Downloader
 ===============
 
-Download USGS LiDAR coverage of FIA plots with the packages `USGSlidar` (R) 
+Downloads USGS LiDAR coverage of FIA plots with the packages `USGSlidar` (R) 
 and `pdal` (Python) from a single combined R/Python conda environment. 
 
 The code in this repo is currently only intended for exploring these tools' 
 capabilities and for investigating possibilities for productionizing their use.
 
-The `USGSlidar` package that is used is a fork, modified to run on Linux, of a package 
+The `USGSlidar` package used is a fork, modified to run on Linux, of a package 
 developed for Windows by Robert J. McGaughey (GitHub: bmcgaughey1). The plan is to 
-ensure that this fork works equally well for both OS, and then open a PR for it to be 
-incorporated in the original package.
+ensure that this fork works equally well for both OS, and then open a PR for the 
+Linux support to be incorporated in the original package.
 
-Tested on Linux (Ubuntu 20).
+Tested on Linux - Ubuntu 20 and RedHat Enterprise 7
 
 Setting up USGS Downloader  
 --------------------------
@@ -20,7 +20,9 @@ Setting up USGS Downloader
 
 1. Clone this repo
 2. `cd` to root of repo
-3. `$ conda env create -f conda.yaml`
+3. `$ conda env create -f [<conda_windows>/<conda_linux>].yaml`
+   - If hangs on "solving environment": cancel, run this command, then try again
+     - `$ conda config --set channel_priority strict`
 4. `$ conda activate usgs_downloader`
 5. `(usgs_downloader) $ Rscript setup.R`
    - Note: *ggspatial* does not yet have a conda package - that is why it is installed by this script 
