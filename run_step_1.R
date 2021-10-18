@@ -14,6 +14,8 @@ library(USGSlidar)
 # TODO: Move all other hard-coded parameters in this script to this section
 # TODO: Make these into CLI args
 state <- "DE"
+pipelines <- "pipelines"
+clips <- "clips"
 clipSize <- 100 # I am doing a 100 m clip; it is a square of 100 m sides if you put 100, centered on the point.
 showMaps <- FALSE  # TODO: True is not currently producing plots
 
@@ -30,7 +32,7 @@ initial.options <- commandArgs(trailingOnly = FALSE)
 file.arg.name <- "--file="
 script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
 script.basename <- dirname(script.name)
-workingFolder = path.expand(file.path(script.basename, "working")) # TODO: Expand not working
+workingFolder = normalizePath(file.path(script.basename, "working"))
 cat("Working directory: ", workingFolder, "\n")
 setwd(workingFolder)
 
@@ -156,10 +158,10 @@ target_projects_sf <- subset(projects_sf, name %in% unique(target_polys_sf$name)
 buildPDALPipelineENTWINE(target_polys_sf,
                          IDColumnLabel = "CN",
                          URLColumnLabel = "url",
-                         pipelineOutputFolder = "",
+                         pipelineOutputFolder = file.path(state, pipelines),
                          pipelineOutputFileBaseName = "Plot",
                          pipelineTemplateFile = "",
-                         clipOutputFolder = "",
+                         clipOutputFolder = file.path(state, clips),
                          verbose = 500
 )
 
