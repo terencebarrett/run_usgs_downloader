@@ -20,13 +20,17 @@ clips <- "clips"
 clipSize <- 1000 # A square, centered on the point
 showMaps <- FALSE  # TODO: True is not currently producing plots
 
+# TODO: Provide for the working folder to be outside the repo, and on a network drive
+
+# TODO: Make sure all aspects of this script can run in parallel with another session of it running
+
 # TODO: Save plots and clips as subdirs of a a time-stamped directory, so multiple
 #  searches can be kept, and so the root of the working folder can keep general
 #  reference data across runs
 
 # TODO: Generalize all aspects of this script so works for any state, without tweaking
 
-# TODO: Investigate why LiDAR tiles are smaller than 100m x 100m
+# TODO: Investigate why LiDAR tiles are smaller than expected
 
 # Set working folder based on script location at runtime
 initial.options <- commandArgs(trailingOnly = FALSE)
