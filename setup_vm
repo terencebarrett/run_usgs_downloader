@@ -1,2 +1,0 @@
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-sh Miniconda3-latest-Linux-x86_64.sh (add options to accept all: install to /home/vagrant/miniconda3, run conda init, etc)

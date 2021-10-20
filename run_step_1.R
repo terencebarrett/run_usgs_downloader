@@ -1,4 +1,5 @@
-# Modified from a script provided by Andrew Lister
+# Modified from a script provided by Andrew Lister, based on an example script
+#   in the USGSlidar repo
 
 library(rgdal)
 library(sf)
@@ -16,7 +17,7 @@ library(USGSlidar)
 state <- "DE"
 pipelines <- "pipelines"
 clips <- "clips"
-clipSize <- 100 # I am doing a 100 m clip; it is a square of 100 m sides if you put 100, centered on the point.
+clipSize <- 1000 # A square, centered on the point
 showMaps <- FALSE  # TODO: True is not currently producing plots
 
 # TODO: Save plots and clips as subdirs of a a time-stamped directory, so multiple
