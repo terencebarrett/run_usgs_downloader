@@ -4,14 +4,20 @@ from subprocess import run
 # TODO: Multiprocess the commands
 # TODO: Make the input parameters into CLI args
 
-# Input parameter
+# Input parameters
+repo_working_folder = True  # `True` to use the repo's `working` folder as the working folder
+outside_working_folder_path = '/vagrant/Edrive/working'  # Only needed if repo_working_folder is `False`; folder must exist
 state = 'DE'
 pipelines = 'pipelines'
 bat_file = 'RUNME.bat'
 
 # Read pdal-pipeline commands
-runtime_path = Path(__file__).parent
-working_path = runtime_path / 'working' / state / pipelines
+if repo_working_folder:
+    runtime_path = Path(__file__).parent
+    working_path = runtime_path / 'working' / state / pipelines
+else:
+    working_path = Path(outside_working_folder_path) / state / pipelines
+
 with open(working_path / bat_file) as f:
     commands = f.readlines()
 

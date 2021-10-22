@@ -14,13 +14,13 @@ library(USGSlidar)
 # Input parameters
 # TODO: Move all other hard-coded parameters in this script to this section
 # TODO: Make these into CLI args
+repoWorkingFolder <- TRUE  # `TRUE` to use the repo's `working` folder as the working folder
+outsideWorkingFolderPath <- "/vagrant/Edrive/working"  # Only needed if repoWorkingFolder is `FALSE`; folder must exist
 state <- "DE"
 pipelines <- "pipelines"
 clips <- "clips"
-clipSize <- 1000 # A square, centered on the point
+clipSize <- 1000  # A square, centered on the point
 showMaps <- FALSE  # TODO: True is not currently producing plots
-
-# TODO: Provide for the working folder to be outside the repo, and on a network drive
 
 # TODO: Make sure all aspects of this script can run in parallel with another session of it running
 
@@ -32,14 +32,19 @@ showMaps <- FALSE  # TODO: True is not currently producing plots
 
 # TODO: Investigate why LiDAR tiles are smaller than expected
 
-# Set working folder based on script location at runtime
-initial.options <- commandArgs(trailingOnly = FALSE)
-file.arg.name <- "--file="
-script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
-script.basename <- dirname(script.name)
-workingFolder = normalizePath(file.path(script.basename, "working"))
-cat("Working directory: ", workingFolder, "\n")
-setwd(workingFolder)
+if (repoWorkingFolder) {
+    # Set working folder based on script location at runtime
+    initial.options <- commandArgs(trailingOnly = FALSE)
+    file.arg.name <- "--file="
+    script.name <- sub(file.arg.name, "", initial.options[grep(file.arg.name, initial.options)])
+    script.basename <- dirname(script.name)
+    workingFolder = normalizePath(file.path(script.basename, "working"))
+    cat("Working directory: ", workingFolder, "\n")
+    setwd(workingFolder)
+} else {
+    cat("Working directory: ", outsideWorkingFolderPath, "\n")
+    setwd(outsideWorkingFolderPath)
+}
 
 # get FIADB for state
 FIADBFile <- paste0("FIADB_", state, ".db")
