@@ -5,8 +5,8 @@ from subprocess import run
 # TODO: Make the input parameters into CLI args
 
 # Input parameters
-repo_working_folder = True  # `True` to use the repo's `working` folder as the working folder
-outside_working_folder_path = '/vagrant/Edrive/working'  # Only needed if repo_working_folder is `False`; folder must exist
+repo_working_folder = False  # `True` to use the repo's `working` folder as the working folder
+outside_working_folder_path = '/vagrant/Odrive/Tools/PythonScripts/Terry/USGS_Downloader/test_VM_to_O'  # Only needed if repo_working_folder is `False`; folder must exist
 state = 'DE'
 pipelines = 'pipelines'
 bat_file = 'RUNME.bat'

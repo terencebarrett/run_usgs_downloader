@@ -6,7 +6,9 @@ Vagrant.configure("2") do |config|
   # Optionally configure other folders to share between host and VM
   # Note: Use \\ as the separator for Windows paths
   config.vm.synced_folder "C:\\Users\\tcbarret\\PycharmProjects\\lidar_dataprep", "/vagrant/lidar_dataprep"
-  config.vm.synced_folder "E:\\USGS_Downloader", "/vagrant/Edrive"
+  config.vm.synced_folder "D:", "/vagrant/Ddrive"
+  config.vm.synced_folder "E:", "/vagrant/Edrive"
+  config.vm.synced_folder "O:", "/vagrant/Odrive"
 
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
