@@ -21,6 +21,9 @@ pipelines <- "pipelines"
 clips <- "clips"
 clipSize <- 100  # A square, centered on the point
 showMaps <- FALSE  # TODO: True is not currently producing plots
+useEvalidator <- TRUE
+localEntwineIndex <- FALSE  # If TRUE, have a copy of the Entwine index in the root of the working folder
+
 
 # TODO: Make sure all aspects of this script can run in parallel with another session of it running
 
@@ -29,8 +32,6 @@ showMaps <- FALSE  # TODO: True is not currently producing plots
 #  reference data across runs
 
 # TODO: Generalize all aspects of this script so works for any state, without tweaking
-
-# TODO: Investigate why LiDAR tiles are smaller than expected
 
 if (repoWorkingFolder) {
     # Set working folder based on script location at runtime
@@ -46,34 +47,62 @@ if (repoWorkingFolder) {
     setwd(outsideWorkingFolderPath)
 }
 
-# get FIADB for state
-FIADBFile <- paste0("FIADB_", state, ".db")
+if (useEvalidator) {
+  # code from Jim Ellenwood to read PLOT data from Evalidator
+  # works as of 9/30/2021 but the API may go away in the future
+  library(httr)
+  library(jsonlite)
 
-# check to see if file exists
-if (!file.exists(FIADBFile)) {
-  fetchFile(paste0("https://apps.fs.usda.gov/fia/datamart/Databases/SQLite_FIADB_", state, ".zip"),
-            paste0(state, ".zip"))
+  # get a table of state numeric codes to use with Evalidator
+  form <- list('colList'= 'STATECD,STATE_ABBR', 'tableName' = 'REF_RESEARCH_STATION',
+                'whereStr' = '1=1',
+                'outputFormat' = 'JSON')
+  urlStr <- 'https://apps.fs.usda.gov/Evalidator/rest/Evalidator/refTablePost?'
+  response <- POST(url = urlStr, body = form, encode = "form") #, verbose())
+  states <- as.data.frame(fromJSON(content(response, type="text")))
+  states<-rename_with(states, ~ gsub("FIADB_SQL_Output.record.", "", .x,fixed=TRUE), starts_with("FIADB"))
+  statecd<-states[states$"STATE_ABBR" == state,"STATECD"]
 
-  # unzip the file
-  unzip(zipfile = paste0(state, ".zip"), exdir = getwd())
+  form = list('colList' = 'CN,PREV_PLT_CN,STATECD,INVYR,MEASYEAR,MEASMON,MEASDAY,LAT,LON,DESIGNCD,KINDCD,PLOT_STATUS_CD',
+               'tableName' = 'PLOT', 'whereStr' = paste0('STATECD=', statecd),
+               'outputFormat' = 'JSON')
+  urlStr = 'https://apps.fs.usda.gov/Evalidator/rest/Evalidator/refTablePost?'
+  response <- POST(url = urlStr, body = form, encode = "form") #, verbose())
 
-  if (file.exists(FIADBFile)) {
-    file.remove(paste0(state, ".zip"))
-  } else {
-    # report a problem unzipping the file
-    cat("*****Could not unzip file: ", paste0(state, ".zip"), "\n")
+  library(jsonlite)
+  PLOT <- as.data.frame(fromJSON(content(response, type = "text")))
+
+  library(dplyr)
+  PLOT <- rename_with(PLOT, ~ gsub("FIADB_SQL_Output.record.","",.x,fixed=TRUE), starts_with("FIADB"))
+} else {
+  # get FIADB for state
+  FIADBFile <- paste0("FIADB_", state, ".db")
+
+  # check to see if file exists
+  if (!file.exists(FIADBFile)) {
+    fetchFile(paste0("https://apps.fs.usda.gov/fia/datamart/Databases/SQLite_FIADB_", state, ".zip"), paste0(state, ".zip"))
+
+    # unzip the file
+    unzip(zipfile = paste0(state, ".zip"), exdir = getwd())
+
+    if (file.exists(FIADBFile)) {
+      file.remove(paste0(state, ".zip"))
+    } else {
+      # report a problem unzipping the file
+      cat("*****Could not unzip file: ", paste0(state, ".zip"), "\n")
+    }
   }
+
+  # connect to FIADB
+  con <- dbConnect(RSQLite::SQLite(), FIADBFile)
+
+  # read tables
+  PLOT <- dbReadTable(con, "PLOT")
+
+  # disconnect from database
+  dbDisconnect(con)
 }
-
-# connect to FIADB
-con <- dbConnect(RSQLite::SQLite(), FIADBFile)
-
-# read tables
-PLOT <- dbReadTable(con, "PLOT")
 totalPlots <- nrow(PLOT)
-
-# disconnect from database
-dbDisconnect(con)
 
 # get plots measured in last ~10 years...could include multiple measurements for some plots
 PLOT <- subset(PLOT, MEASYEAR >= 2010)
@@ -91,12 +120,24 @@ pts_sf <- st_transform(pts_sf, 3857)
 
 if (showMaps) mapview(pts_sf)
 
-# retrieve the entwine index with metadata
-fetchUSGSProjectIndex(type = "entwineplus")
+# retrieve the entwine index with metadata - Uncomment one of the these methods
+if (localEntwineIndex) {
+    setUSGSProjectIndex(normalizePath(file.path(getwd(), 'ENTWINEBoundaries.gpkg')))
+} else {
+    fetchUSGSProjectIndex(type = "entwineplus")
+}
 
-# query the index to get the lidar projects covering the points with 160m circle
+# compute buffer sizes to use to "correct" distortions related to web mercator projection
+# for this example, I use the plot locations in web mercator. The locations will be projected
+# to NAD83 LON-LAT to get the latitude for each plot location. The buffer (1/2 plot size) will
+# be different for every plot.
+#
+# NOTE: all calls to queryUSGS... functions will use the new buffers instead of clipSize / 2
+plotBuffers <- computeClipBufferForCONUS(clipSize / 2, points = pts_sf)
+
+# query the index to get the lidar projects covering the points (including a buffer)
 # this call returns the project boundaries that contain plots
-projects_sf <- queryUSGSProjectIndex(buffer = clipSize / 2, aoi = pts_sf)
+projects_sf <- queryUSGSProjectIndex(buffer = plotBuffers, aoi = pts_sf)
 
 # subset the results to drop the KY statewide aggregated point set
 # there are a few lidar projects like this where data from several projects
@@ -108,7 +149,9 @@ if (showMaps) mapview(projects_sf)
 
 # query the index again to get the point data populated with lidar project information
 # this call returns the sample locations (polygons) with lidar project attributes
-real_polys_sf <- queryUSGSProjectIndex(buffer = clipSize / 2, aoi = pts_sf, return = "aoi", shape = "square")
+real_polys_sf <- queryUSGSProjectIndex(buffer = plotBuffers, aoi = pts_sf, return = "aoi", shape = "square")
+
+# TODO: Replace to here
 
 # query the index again to get the point data populated with lidar project information
 # this call returns the sample locations (points) with lidar project attributes
