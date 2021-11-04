@@ -40,11 +40,12 @@ Setting up USGS Downloader
 4. `$ conda config --set channel_priority strict`
 5. `$ conda env create -f conda_linux.yaml`
 6. `$ conda activate usgs_downloader`
-7. `(usgs_downloader) $ Rscript setup.R`
+7. `(usgs_downloader) $ Rscript setup_step_1.R`
    - Note: *ggspatial* does not yet have a conda package - that is why it is installed by this script 
    and not via conda, the preferred way; see https://githubmemory.com/repo/paleolimbot/ggspatial/issues/83
-
-
+8. `(usgs_downloader) $ Rscript setup_step_2.R`
+   - This is also the script to run later on to upgrade the USGSlidar dependency 
+   
 Running USGS Downloader for the example provided - the state of Delaware
 ------------------------------------------------------------------------
 1. `$ conda activate usgs_downloader`
