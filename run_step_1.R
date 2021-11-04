@@ -14,12 +14,12 @@ library(USGSlidar)
 # Input parameters
 # TODO: Move all other hard-coded parameters in this script to this section
 # TODO: Make these into CLI args
-repoWorkingFolder <- FALSE  # `TRUE` to use the repo's `working` folder as the working folder
+repoWorkingFolder <- TRUE  # `TRUE` to use the repo's `working` folder as the working folder
 outsideWorkingFolderPath <- "/vagrant/Odrive/Tools/PythonScripts/Terry/USGS_Downloader/test_VM_to_O"  # Only needed if repoWorkingFolder is `FALSE`; folder must exist
 state <- "DE"
 pipelines <- "pipelines"
 clips <- "clips"
-clipSize <- 1000  # A square, centered on the point
+clipSize <- 100  # A square, centered on the point
 showMaps <- FALSE  # TODO: True is not currently producing plots
 
 # TODO: Make sure all aspects of this script can run in parallel with another session of it running
