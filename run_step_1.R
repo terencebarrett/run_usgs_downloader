@@ -1,5 +1,5 @@
-# Modified from a script provided by Andrew Lister, based on an example script
-#   in the USGSlidar repo
+# Based on an example script in the USGSlidar repo:
+# https://github.com/bmcgaughey1/USGSlidar/blob/master/ExampleScripts/FIAPlotExample.R
 
 library(rgdal)
 library(sf)
@@ -150,8 +150,6 @@ if (showMaps) mapview(projects_sf)
 # query the index again to get the point data populated with lidar project information
 # this call returns the sample locations (polygons) with lidar project attributes
 real_polys_sf <- queryUSGSProjectIndex(buffer = plotBuffers, aoi = pts_sf, return = "aoi", shape = "square")
-
-# TODO: Replace to here
 
 # query the index again to get the point data populated with lidar project information
 # this call returns the sample locations (points) with lidar project attributes
