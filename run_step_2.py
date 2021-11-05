@@ -18,7 +18,7 @@ outside_working_folder_path = '/vagrant/Odrive/Tools/PythonScripts/Terry/USGS_Do
 state = 'DE'
 pipelines = 'pipelines'
 bat_file = 'RUNME.bat'
-multiprocess = False  # If `True`, will multiprocess with one less than the total available cores
+multiprocess = True  # If `True`, will multiprocess with one less than the total available cores
 
 
 # Read pdal-pipeline commands
