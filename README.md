@@ -14,6 +14,20 @@ Linux support to be incorporated in the original package.
 
 Tested on Linux - Ubuntu 20 and RedHat Enterprise 7
 
+Set up on the VACC
+------------------
+- Log in to a VACC node: `ssh <NetID>@<vacc-user1.uvm.edu|vacc-user2.uvm.edu>` 
+  - Choose either VACC node - operationally they are identical, 
+  performance on a node depends on the number of user logged in to it
+  - Use NetID password
+- Install this repo
+  - `mkdir code`
+  - `cd code`
+  - `git clone https://github.com/terencebarrett/run_usgs_downloader.git`
+  - `cd run_usgs_downloader`
+  - `git checkout <branch>`
+- Continue setup with step (2) in the section "Setting up USGS Downloader", below
+
 Start here if setting up to run in a RedHat VM, otherwise skip to the next section
 ----------------------------------------------------------------------------------
 1. Clone this repo to the host machine
@@ -66,7 +80,17 @@ start fresh
      - The *laz* point clouds should be a number of small point cloud tiles scattered throughout 
      the state of Delaware
 
-
+Running a Slurm batch run on the VACC
+-------------------------------------
+- Slurm documentation: https://slurm.schedmd.com/documentation.html
+- VACC guide: https://www.uvm.edu/vacc/kb/knowledge-base/useful-commands/#slurm
+- A basic way to run Step 2 using Slurm:
+  - Start an interactive Slurm run session with 8 cores
+    - `srun --nodes=1 --ntasks=1 --cpus-per-task=8 --mail-user=<NetID>@uvm.edu --mail-type=ALL --pty /bin/bash -l`
+  - Run Step 2
+    - `/users/t/c/<NetID>/miniconda3/condabin/conda run --prefix /users/t/c/<NetID>/miniconda3/envs/usgs_downloader python /users/t/c/<NetID>/code/run_usgs_downloader/run_step_2.py`
+  - Exit Slurm run session
+    - `exit`
 
 
 
