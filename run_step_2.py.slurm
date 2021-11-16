@@ -22,13 +22,13 @@
 # Cores per Process/Task
 #SBATCH --cpus-per-task=8
 
-### Memory (default is 1G, for entire job, can specify by entire job or by core)
+# Memory (default is 1G, for entire job, can specify by entire job or by core)
 
 # Email
 #SBATCH --mail-type=ALL
 
 # Rename log file to "<myjob>_<jobid>.out"
-#SBATCH –output=%x_%j.out
+#SBATCH –-output=%x_%j.out
 
 ### Executable section ###
 
