@@ -19,7 +19,7 @@ outsideWorkingFolderPath <- "/vagrant/Odrive/Tools/PythonScripts/Terry/USGS_Down
 state <- "DE"
 pipelines <- "pipelines"
 clips <- "clips"
-clipSize <- 100  # A square, centered on the point
+clipSize <- 1000  # A square, centered on the point
 showMaps <- FALSE  # TODO: True is not currently producing plots
 useEvalidator <- TRUE
 localEntwineIndex <- FALSE  # If TRUE, have a copy of the Entwine index in the root of the working folder

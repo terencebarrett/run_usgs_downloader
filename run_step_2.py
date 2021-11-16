@@ -10,7 +10,10 @@ from numpy import around
 
 
 # TODO: Make the input parameters into CLI args
-
+# TODO: Check for existence of output folder - if can't be written to PDAL will
+#  keep going with no output
+# TODO: Count number of downloaded clips and compare to expected number
+# TODO: Report with download result (sizable file, 1kb file, no file, error messages
 
 # Input parameters
 repo_working_folder = True  # `True` to use the repo's `working` folder as the working folder
@@ -19,7 +22,7 @@ state = 'DE'
 pipelines = 'pipelines'
 bat_file = 'RUNME.bat'
 multiprocess = True  # If `True`, will multiprocess with one less than the total available cores
-
+user_cores = None  # Number of cores to use or `None` to use max(cores)-1
 
 # Read pdal-pipeline commands
 start_timing = timer()
@@ -44,7 +47,7 @@ if multiprocess:
         stdout, stderr = p.communicate()
         return stdout, stderr
 
-    cores = str(cpu_count() - 1)
+    cores = user_cores if user_cores else str(cpu_count() - 1)
     print(f'Running on {cores} cores')
     pool = ThreadPool(int(cores))
     results = []
