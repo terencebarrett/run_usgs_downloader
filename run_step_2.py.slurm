@@ -17,10 +17,10 @@
 #SBATCH --nodes=1
 
 # Processes/Tasks per Node
-#SBATCH --ntasks=1
+#SBATCH --ntasks=2
 
 # Cores per Process/Task
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=8
 
 # Memory (default is 1G, for entire job, can specify by entire job or by core)
 
