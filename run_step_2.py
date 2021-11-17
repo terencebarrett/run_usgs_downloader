@@ -22,7 +22,7 @@ state = 'DE'
 pipelines = 'pipelines'
 bat_file = 'RUNME.bat'
 multiprocess = True  # If `True`, will multiprocess with one less than the total available cores
-user_cores = None  # Number of cores to use or `None` to use max(cores)-1
+user_cores = 23  # Number of cores to use or `None` to use max(cores)-1
 
 # Read pdal-pipeline commands
 start_timing = timer()
@@ -47,8 +47,9 @@ if multiprocess:
         stdout, stderr = p.communicate()
         return stdout, stderr
 
-    cores = user_cores if user_cores else str(cpu_count() - 1)
-    print(f'Running on {cores} cores')
+    cpu_count = cpu_count()
+    cores = user_cores if user_cores else str(cpu_count - 1)
+    print(f'Running on {cores} cores of the {cpu_count} available')
     pool = ThreadPool(int(cores))
     results = []
     for command in commands:
