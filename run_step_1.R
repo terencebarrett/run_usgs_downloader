@@ -10,20 +10,36 @@ library(tidyverse)
 library(lubridate)
 
 library(USGSlidar)
+library(optparse)
 
-# Input parameters
+
+# Read CLI arguments
+args_list <- list(
+    make_option(c("-s", "--state"), type="character", default="DE",
+    help="2-letter state abbreviation", metavar="character"),
+    make_option(c("-l", "--local_entwine_index"), default=FALSE, action="store_true",
+    help="Flag to use existing Entwine index, otherwise a new one will be retrieved"),
+    make_option(c("-c", "--clip_size"), type="integer", default=100,
+    help="Size of square clip, in meters, centered on the point", metavar="number")
+);
+args = parse_args(OptionParser(option_list=args_list));
+
+# Input and echo parameters
 # TODO: Move all other hard-coded parameters in this script to this section
-# TODO: Make these into CLI args
+# TODO: Make all of these into CLI args
 repoWorkingFolder <- TRUE  # `TRUE` to use the repo's `working` folder as the working folder
 outsideWorkingFolderPath <- "/vagrant/Odrive/Tools/PythonScripts/Terry/USGS_Downloader/test_VM_to_O"  # Only needed if repoWorkingFolder is `FALSE`; folder must exist
-state <- "DE"
+state <- args$state
 pipelines <- "pipelines"
 clips <- "clips"
-clipSize <- 1000  # A square, centered on the point
+clipSize <- args$clip_size
 showMaps <- FALSE  # TODO: True is not currently producing plots
 useEvalidator <- TRUE
-localEntwineIndex <- FALSE  # If TRUE, have a copy of the Entwine index in the root of the working folder
+localEntwineIndex <- args$local_entwine_index
 
+cat("State: ", state, "\n")
+cat("Nominal clip size [m]: ", clipSize, "\n")
+cat("Using local Entwine index: ", localEntwineIndex, "\n")
 
 # TODO: Make sure all aspects of this script can run in parallel with another session of it running
 

@@ -13,6 +13,7 @@ dependencies:
   - r-lubridate
   - r-lwgeom
   - r-mapview
+  - r-optparse
   - r-rmarkdown
   - r-rsqlite
   - r-tidyverse
