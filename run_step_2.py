@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 from multiprocessing import cpu_count
 from multiprocessing.pool import ThreadPool
 from os import name
@@ -9,20 +10,33 @@ from timeit import default_timer as timer
 from numpy import around
 
 
-# TODO: Make the input parameters into CLI args
+# TODO: Make all input parameters into CLI args
 # TODO: Check for existence of output folder - if can't be written to PDAL will
 #  keep going with no output
 # TODO: Count number of downloaded clips and compare to expected number
 # TODO: Report with download result (sizable file, 1kb file, no file, error messages
+# TODO: Clear output folder at start of run, with check for existing data there first
 
-# Input parameters
+
+# Read CLI arguments
+parser = ArgumentParser()
+parser.add_argument('-s', '--state', type=str, default='DE',
+                    help="2-letter state abbreviation")
+parser.add_argument('-c', '--cores', type=int, default=None,
+                    help="Number of parallel processes, or None to use cpu_count() - 1")
+args = parser.parse_args()
+
+
+# Input and echo parameters
 repo_working_folder = True  # `True` to use the repo's `working` folder as the working folder
 outside_working_folder_path = '/vagrant/Odrive/Tools/PythonScripts/Terry/USGS_Downloader/test_VM_to_O'  # Only needed if repo_working_folder is `False`; folder must exist
-state = 'DE'
+state = args.state
 pipelines = 'pipelines'
 bat_file = 'RUNME.bat'
 multiprocess = True  # If `True`, will multiprocess with one less than the total available cores
-user_cores = 23  # Number of cores to use or `None` to use max(cores)-1
+user_cores = args.cores
+
+print(f'Processing state: {state}')
 
 # Read pdal-pipeline commands
 start_timing = timer()

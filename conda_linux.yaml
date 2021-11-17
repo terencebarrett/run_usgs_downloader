@@ -4,7 +4,7 @@ channels:
   - r
   - default
 dependencies:
-  - pdal
+  - pdal=2.3
   - pip
   - python=3.9
   - r=3

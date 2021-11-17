@@ -38,3 +38,5 @@ set -x
 cd ${HOME}
 
 ~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader python ~/code/run_usgs_downloader/run_step_2.py
+
+# Copy log file to results folder
