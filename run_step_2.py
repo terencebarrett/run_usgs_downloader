@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from json import load
 from multiprocessing import cpu_count
 from multiprocessing.pool import ThreadPool
 from os import name
@@ -11,11 +12,7 @@ from numpy import around
 
 
 # TODO: Make all input parameters into CLI args
-# TODO: Check for existence of output folder - if can't be written to PDAL will
-#  keep going with no output
-# TODO: Count number of downloaded clips and compare to expected number
 # TODO: Report with download result (sizable file, 1kb file, no file, error messages
-# TODO: Clear output folder at start of run, with check for existing data there first
 
 
 # Read CLI arguments
@@ -47,8 +44,41 @@ else:
     working_path = Path(outside_working_folder_path) / state / pipelines
 
 with open(working_path / bat_file) as f:
-    commands_raw = f.readlines()
-commands = commands_raw[1:]  # Skip comment in first line of the (Windows) batch file
+    command_lines_raw = f.readlines()
+command_lines = command_lines_raw[1:]  # Skip comment in first line of the (Windows) batch file
+num_pipelines = len(command_lines)
+
+pipeline_dict = {Path(command.strip().split()[2]).stem.split('_')[-1]:
+                    {'command': command.strip(),
+                     'pipeline_filepath': Path(command.strip().split()[2])}
+                 for command in command_lines}
+
+result_dict = pipeline_dict.copy()
+for id, id_dict in pipeline_dict.items():
+    with open(str(id_dict['pipeline_filepath'])) as f:
+        json_dict = load(f)
+        output_filepath = Path(json_dict[1]['filename'])
+        result_dict[id]['output_filepath'] = output_filepath
+
+
+def file_sizes(input_dict):
+    output_dict = input_dict.copy()
+    for id, id_dict in input_dict.items():
+        output_filepath = id_dict['output_filepath']
+        output_dict[id]['output_size'] = output_filepath.stat().st_size \
+            if output_filepath.exists() else 0
+    total_size = sum([size for size in [one_id_dict['output_size']
+                                        for one_id_dict in output_dict.values()]])
+    cmds_zero_size = [one_id_dict['command'] for one_id_dict in output_dict.values()
+                      if one_id_dict['output_size'] == 0]
+    return output_dict, total_size, cmds_zero_size
+
+
+result_dict, start_size, commands = file_sizes(result_dict)
+if start_size > 0:
+    raise RuntimeError('Clear output folder and restart')
+num_pipelines = len(commands)
+print(f'Processing {num_pipelines} PDAL pipelines')
 
 # Run PDAL pipelines
 if multiprocess:
@@ -67,8 +97,7 @@ if multiprocess:
     pool = ThreadPool(int(cores))
     results = []
     for command in commands:
-        command_stripped = command.strip()
-        results.append(pool.apply_async(call_process, [command_stripped]))
+        results.append(pool.apply_async(call_process, [command]))
 
     # Close the pool and wait for each running task to complete
     pool.close()
@@ -86,15 +115,38 @@ else:
     # Execute pdal-pipeline commands one at a time
     print(f'Running on one core')
     for command in commands:
-        command_stripped = command.strip()
-        print(f'Running command: {command_stripped}')
-        command_args = command_stripped.split()
+        print(f'Running command: {command}')
+        command_args = command.split()
         result = run(command_args,
                      capture_output=True,
                      cwd=working_path,
                      universal_newlines=True)
         print(f'stdout: \n{result.stdout}') if result.stdout else None
         print(f'stderr: \n{result.stderr}') if result.stderr else None
+
+# Get size of downloaded files
+result_dict, downloaded_size, retry_commands = file_sizes(result_dict)
+print(f'Total size downloaded: {downloaded_size} bytes')
+
+if retry_commands:
+    print(f'{len(retry_commands)} downloads failed')
+    print('Retrying pdal-pipeline commands that failed, one at a time')
+    for command in retry_commands:
+        print(f'Running command: {command}')
+        command_args = command.split()
+        result = run(command_args,
+                     capture_output=True,
+                     cwd=working_path,
+                     universal_newlines=True)
+        print(f'stdout: \n{result.stdout}') if result.stdout else None
+        print(f'stderr: \n{result.stderr}') if result.stderr else None
+
+    # Get size of downloaded files
+    result_dict, downloaded_size, failed_commands = file_sizes(result_dict)
+
+    print(f'Total size downloaded: {downloaded_size} bytes')
+    if failed_commands:
+        print(f'{len(failed_commands)} downloads failed')
 
 stop_timing = timer()
 process_time_minutes = (stop_timing - start_timing) / 60

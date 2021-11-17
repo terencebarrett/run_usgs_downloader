@@ -20,7 +20,7 @@
 #SBATCH --ntasks=1
 
 # Cores per Process/Task
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=16
 
 # Memory (default is 1G, for entire job, can specify by entire job or by core)
 
@@ -36,7 +36,6 @@
 set -x
 
 cd ${HOME}
-
-~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader python ~/code/run_usgs_downloader/run_step_2.py
+~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader python ~/code/run_usgs_downloader/run_step_2.py -s DE -c 127
 
 # Copy log file to results folder
