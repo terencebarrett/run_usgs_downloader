@@ -28,7 +28,7 @@
 #SBATCH --mail-type=ALL
 
 # Rename log file to "<myjob>_<jobid>.out"
-#SBATCH –-output="test_%j.out"
+#SBATCH –-output=test_%x.out
 
 ### Executable section ###
 
