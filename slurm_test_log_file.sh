@@ -36,7 +36,8 @@
 set -x
 
 cd ${HOME}
-ln -f ~/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out renamed.out
-echo "Test for log file renaming and copying"
 
-# Copy log file to results folder
+# Link log file to one with a preferred name
+ln -f ~/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out ~/code/run_usgs_downloader/working/DE/$SLURM_JOB_NAME_$SLURM_JOB_ID.out
+
+echo "Test for log file renaming and copying"
