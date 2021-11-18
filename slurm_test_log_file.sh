@@ -3,7 +3,7 @@
 ### Slurm header section ###
 
 # Job name
-#SBATCH --job-name=testlogfile
+#SBATCH --job-name=logfile
 
 # Partition
 # `short`: jobs < 3 hrs; `bluemoon`/`bigmem` < 30 hrs; `week`/`bigmemwk`: < 7 days
@@ -28,7 +28,7 @@
 #SBATCH --mail-type=ALL
 
 # Rename log file to "<myjob>_<jobid>.out"
-#SBATCH –-output=%x_%j.out
+#SBATCH –-output=test_%j.out
 
 ### Executable section ###
 
