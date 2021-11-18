@@ -37,9 +37,10 @@ set -x
 
 cd ${HOME}
 
+# Use state 2-letter code from the command line argument
 STATE=$1
 
 # Link log file to one with a preferred name, and in the output folder
-ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "$HOME/code/run_usgs_downloader/working/${STATE}/${SLURM_JOB_NAME}_$SLURM_JOB_ID.out"
+ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "$HOME/code/run_usgs_downloader/working/${STATE}/${SLURM_JOB_NAME}_${STATE}_$SLURM_JOB_ID.out"
 
 ~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader python ~/code/run_usgs_downloader/run_step_2.py -s "${STATE}"
