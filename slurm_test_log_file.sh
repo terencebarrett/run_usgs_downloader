@@ -36,7 +36,7 @@
 set -x
 
 cd ${HOME}
-ln -f slurm-$SLURM_JOB_ID.out renamed.out
+ln -f ~/slurm-$SLURM_JOB_ID.out renamed.out
 echo "Test for log file renaming and copying"
 
 # Copy log file to results folder
