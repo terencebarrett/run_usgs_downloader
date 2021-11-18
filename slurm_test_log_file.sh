@@ -3,7 +3,7 @@
 ### Slurm header section ###
 
 # Job name
-#SBATCH --job-name=test_log_file
+#SBATCH --job-name=testlogfile
 
 # Partition
 # `short`: jobs < 3 hrs; `bluemoon`/`bigmem` < 30 hrs; `week`/`bigmemwk`: < 7 days
