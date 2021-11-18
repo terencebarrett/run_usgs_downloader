@@ -41,4 +41,6 @@ cd ${HOME}
 ln -f ~/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out ~/code/run_usgs_downloader/working/DE/$SLURM_JOB_NAME_$SLURM_JOB_ID.out
 
 echo "Test for log file renaming and copying"
-env
+echo $SLURM_JOB_NAME
+echo $SLURM_JOB_ID
+#env
