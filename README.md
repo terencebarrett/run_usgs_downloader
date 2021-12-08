@@ -92,7 +92,19 @@ Running a Slurm batch run on the VACC
   - Exit Slurm run session
     - `exit`
 
-
-
-
-
+FileZilla settings
+------------------
+- VM:
+  - Protocol: SFTP
+  - Host: localhost
+  - Port: 2222
+  - Logon type: Key file
+  - User: vagrant
+  - Key file: <path>\run_usgs_downloader\.vagrant\machines\default\virtualbox\private_key
+- VACC:
+  - Protocol: SFTP
+  - Host: vacc-user1.uvm.edu
+  - Port: ... leave empty ...
+  - Logon type: Ask
+  - User: <NetID>
+  - Password (when asked): <NetID password>
