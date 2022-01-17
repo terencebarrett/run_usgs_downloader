@@ -80,18 +80,30 @@ start fresh
      - The *laz* point clouds should be a number of small point cloud tiles scattered throughout 
      the state of Delaware
 
-Running a Slurm batch run on the VACC
--------------------------------------
+Running a batch run on the VACC
+-------------------------------
 - Slurm documentation: https://slurm.schedmd.com/documentation.html
 - VACC guide: https://www.uvm.edu/vacc/kb/knowledge-base/useful-commands/#slurm
-- A basic way to run Step 2 using Slurm:
-  - Start an interactive Slurm run session with 8 cores
-    - `srun --nodes=1 --ntasks=1 --cpus-per-task=8 --mail-user=<NetID>@uvm.edu --mail-type=ALL --pty /bin/bash -l`
-  - Run Step 2
-    - `/users/t/c/<NetID>/miniconda3/condabin/conda run --prefix /users/t/c/<NetID>/miniconda3/envs/usgs_downloader python /users/t/c/<NetID>/code/run_usgs_downloader/run_step_2.py`
-  - Exit Slurm run session
-    - `exit`
-
+- `cd` to root of repo
+- Delete the contents of the repo’s *working* folder (the results of the previous run) -- if want to 
+start fresh
+- Step 1
+  - `$ conda activate usgs_downloader`
+  - `$ source batch_step_1` (or with another, similar batch file)
+- Step 2
+  - Basic way to run Step 2 using Slurm in an interactive session (not recommended after an initial small try):
+    - Start an interactive Slurm run session with 8 cores
+      - `srun --nodes=1 --ntasks=1 --cpus-per-task=8 --mail-user=<NetID>@uvm.edu --mail-type=ALL --pty /bin/bash -l`
+    - Run Step 2
+      - `/users/t/c/<NetID>/miniconda3/condabin/conda run --prefix /users/t/c/<NetID>/miniconda3/envs/usgs_downloader python /users/t/c/<NetID>/code/run_usgs_downloader/run_step_2.py`
+    - Exit Slurm run session
+      - `exit`
+  - Proper way to run Step 2 with Slurm that accords with VACC best practices
+    - `$ sbatch slurm_step_2.sh <2-letter-state>`
+  - To batch multiple Step 2 Slurm runs
+    - This slurm-processes the states sequentially so as not to overwhelm the USGS Entwine server
+    - `$ source batch_slurm_step_2.sh`
+    
 FileZilla settings
 ------------------
 - VM:
