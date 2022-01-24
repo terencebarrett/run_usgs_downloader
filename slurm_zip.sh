@@ -40,5 +40,5 @@ cd /gpfs2/scratch/tcbarret/zip_processing
 # Link log file to one with a preferred name, and in the output folder
 # ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "/gpfs2/scratch/tcbarret/downloader/${SLURM_JOB_NAME}_$SLURM_JOB_ID.out"
 
-wget  https://gisftp.colorado.gov/State%20Data/OIT-GIS/ColoradoData/Physical%20Geography/Counties/Park/Park%20County%20DEM%20Files.zip
-gunzip Park%20County%20DEM%20Files.zip
+wget -q https://gisftp.colorado.gov/State%20Data/OIT-GIS/ColoradoData/Physical%20Geography/Counties/Park/Park.zip
+unzip Park.zip
