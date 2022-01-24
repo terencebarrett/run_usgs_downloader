@@ -27,8 +27,8 @@ args = parse_args(OptionParser(option_list=args_list));
 # Input and echo parameters
 # TODO: Move all other hard-coded parameters in this script to this section
 # TODO: Make all of these into CLI args
-repoWorkingFolder <- TRUE  # `TRUE` to use the repo's `working` folder as the working folder
-outsideWorkingFolderPath <- "/vagrant/Odrive/Tools/PythonScripts/Terry/USGS_Downloader/test_VM_to_O"  # Only needed if repoWorkingFolder is `FALSE`; folder must exist
+repoWorkingFolder <- FALSE  # `TRUE` to use the repo's `working` folder as the working folder
+outsideWorkingFolderPath <- "/gpfs2/scratch/tcbarret/downloader"  # Only needed if repoWorkingFolder is `FALSE`; folder must exist
 state <- args$state
 pipelines <- "pipelines"
 clips <- "clips"
