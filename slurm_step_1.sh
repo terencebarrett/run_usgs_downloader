@@ -3,15 +3,15 @@
 ### Slurm header section ###
 
 # Job name
-#SBATCH --job-name=downloader_step_2
+#SBATCH --job-name=downloader_step_1
 
 # Partition
 # `short`: jobs < 3 hrs; `bluemoon`/`bigmem` < 30 hrs; `week`/`bigmemwk`: < 7 days
-#SBATCH --partition=bluemoon
+#SBATCH --partition=short
 
 # Walltime (hh:mm:ss)
 # End job if hits this to not run afoul of partition guideline
-#SBATCH --time=30:00:00
+#SBATCH --time=03:00:00
 
 # Nodes
 #SBATCH --nodes=1
@@ -20,7 +20,7 @@
 #SBATCH --ntasks=1
 
 # Cores per Process/Task
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 
 # Memory (default is 1G, for entire job, can specify by entire job or by core)
 
@@ -37,10 +37,7 @@ set -x
 
 cd ${HOME}
 
-# Use state 2-letter code from the command line argument
-STATE=$1
-
 # Link log file to one with a preferred name, and in the output folder
-ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "$HOME/code/run_usgs_downloader/working/${STATE}/${SLURM_JOB_NAME}_${STATE}_$SLURM_JOB_ID.out"
+ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "/gpfs2/scratch/tcbarret/downloader/${SLURM_JOB_NAME}_$SLURM_JOB_ID.out"
 
-~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader python ~/code/run_usgs_downloader/run_step_2.py -s "${STATE}"
+~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader bash "$HOME/code/run_usgs_downloader/batch_step_1_east_vs_west.sh"
