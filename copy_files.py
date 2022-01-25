@@ -2,8 +2,8 @@ from pathlib import Path
 
 from shutil import copy2
 
-input_folder = '/gpfs2/scratch/tcbarret/zip_processing/Park County DEM Files'
-output_folder = '/gpfs2/scratch/tcbarret/zip_processing/Park_County_DEM_Files_selection'
+input_folder = '/gpfs2/scratch/tcbarret/zip_processing/Park/2019/Products/LAS'
+output_folder = '/gpfs2/scratch/tcbarret/zip_processing/Park_selection'
 keyword_list = ['CWCB_PARK_04331',
                 'CWCB_PARK_04332',
                 'CWCB_PARK_04333',
