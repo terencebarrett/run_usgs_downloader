@@ -20,7 +20,7 @@
 #SBATCH --ntasks=1
 
 # Cores per Process/Task
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=16
 
 # Memory (default is 1G, for entire job, can specify by entire job or by core)
 
@@ -35,12 +35,13 @@
 # Echo each command to the log file
 set -x
 
-cd ${HOME}
+cd "$HOME/code/run_usgs_downloader"
 
 # Use state 2-letter code from the command line argument
 STATE=$1
 
-# Link log file to one with a preferred name, and in the output folder
-ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "$HOME/code/run_usgs_downloader/working/${STATE}/${SLURM_JOB_NAME}_${STATE}_$SLURM_JOB_ID.out"
+# Link log file to one with a preferred name, and in the output folder - TODO: Fix linking to scratch drive
+#ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "$HOME/code/run_usgs_downloader/working/${STATE}/${SLURM_JOB_NAME}_${STATE}_$SLURM_JOB_ID.out"
+ln -f "slurm-$SLURM_JOB_ID.out" "${SLURM_JOB_NAME}_${STATE}_$SLURM_JOB_ID.out"
 
 ~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader python ~/code/run_usgs_downloader/run_step_2.py -s "${STATE}"
