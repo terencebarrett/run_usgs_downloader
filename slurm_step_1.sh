@@ -37,7 +37,8 @@ set -x
 
 cd ${HOME}
 
-# Link log file to one with a preferred name, and in the output folder
-ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "/gpfs2/scratch/tcbarret/downloader/${SLURM_JOB_NAME}_$SLURM_JOB_ID.out"
+# Link log file to one with a preferred name, and in the output folder - TODO: Fix linking to scratch
+#ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "/gpfs2/scratch/tcbarret/downloader/${SLURM_JOB_NAME}_$SLURM_JOB_ID.out"
+ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "$HOME/code/run_usgs_downloader/${SLURM_JOB_NAME}_$SLURM_JOB_ID.out"
 
-~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader bash "$HOME/code/run_usgs_downloader/batch_step_1_east_vs_west.sh"
+~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader bash "$HOME/code/run_usgs_downloader/batch_step_1_eastern_states.sh"
