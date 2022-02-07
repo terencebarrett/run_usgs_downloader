@@ -88,8 +88,11 @@ Running a batch run on the VACC
 - Delete the contents of the repo’s *working* folder (the results of the previous run) -- if want to 
 start fresh
 - Step 1
-  - `$ conda activate usgs_downloader`
-  - `$ source batch_step_1` (or with another, similar batch file)
+  - Basic way to run Step 1 on the user node (not recommended after an initial small try)
+    - `$ conda activate usgs_downloader`
+    - `$ source batch_step_1` (or with another, similar batch file)
+  - Proper way to run Step 1 with Slurm that accords with VACC best practices
+    - `$ sbatch slurm_step_1.sh`
 - Step 2
   - Basic way to run Step 2 using Slurm in an interactive session (not recommended after an initial small try):
     - Start an interactive Slurm run session with 8 cores
