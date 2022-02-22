@@ -123,3 +123,11 @@ FileZilla settings
   - Logon type: Ask
   - User: <NetID>
   - Password (when asked): <NetID password>
+
+VM Maintenance
+--------------
+- When starting the VM, if a message appears to the effect of "Guest Additions version doesn't match that of Host"
+  - Install the VB-Guest plugin into the project's Virtual Box, which will keep the Guest Additions version 
+  in sync:`vagrant plugin install vagrant-vbguest`
+  - When the host's Virtual Box is upgraded, update the plugin with: `vagrant plugin update vagrant-vbguest`
+  - If the plugin gets corrupted: `vagrant plugin repair vagrant-vbguest`
