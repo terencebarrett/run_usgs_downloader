@@ -31,7 +31,8 @@ combined_df = combined_df.merge(laz_df, how='left', on='ClipFile')
 combined_df['ClipFileSizeCat'] = ''
 combined_df.loc[combined_df['ClipFileSize'].isna(), 'ClipFileSizeCat'] = 'NoFile'
 combined_df.loc[combined_df['ClipFileSize'] < 0.1, 'ClipFileSizeCat'] = 'EmptyFile'
-combined_df.loc[(combined_df['ClipFileSize'] > 0.1) & (combined_df['ClipFileSize'] <= 1000), 'ClipFileSizeCat'] = 'SmallFile'
+combined_df.loc[(combined_df['ClipFileSize'] > 0.1) & (combined_df['ClipFileSize'] <= 1000),
+                'ClipFileSizeCat'] = 'SmallFile'
 combined_df.loc[combined_df['ClipFileSize'] > 1000, 'ClipFileSizeCat'] = 'CandidateFile'
 
 print(f'Total records: {len(combined_df)}')
