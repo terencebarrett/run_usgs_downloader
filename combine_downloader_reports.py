@@ -28,5 +28,13 @@ for report_file in report_files:
     combined_df = combined_df.append(state_df)
 
 combined_df = combined_df.merge(laz_df, how='left', on='ClipFile')
+combined_df['ClipFileSizeCat'] = ''
+combined_df.loc[combined_df['ClipFileSize'].isna(), 'ClipFileSizeCat'] = 'NoFile'
+combined_df.loc[combined_df['ClipFileSize'] <= 1000, 'ClipFileSizeCat'] = 'SmallFile'
+combined_df.loc[combined_df['ClipFileSize'] > 1000, 'ClipFileSizeCat'] = 'CandidateFile'
+
+print(f'Total records: {len(combined_df)}')
+print(f'Categories: \n{combined_df["ClipFileSizeCat"].value_counts()}')
+
 combined_df.drop(columns=['filepath']).sort_values(['State', 'CN']).to_csv(
     output_path / f'{project_name}.csv', index=False)
