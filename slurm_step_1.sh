@@ -41,4 +41,4 @@ cd "$HOME/code/run_usgs_downloader"
 #ln -f "$HOME/code/run_usgs_downloader/slurm-$SLURM_JOB_ID.out" "/gpfs2/scratch/tcbarret/downloader/${SLURM_JOB_NAME}_$SLURM_JOB_ID.out"
 ln -f "slurm-$SLURM_JOB_ID.out" "${SLURM_JOB_NAME}_$SLURM_JOB_ID.out"
 
-~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader bash batch_step_1_western_states.sh
+~/miniconda3/condabin/conda run --prefix ~/miniconda3/envs/usgs_downloader bash batch_step_1_all_states.sh
