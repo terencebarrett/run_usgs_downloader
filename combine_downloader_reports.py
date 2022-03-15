@@ -1,11 +1,12 @@
 from pathlib import Path
 
-from pandas import read_csv, DataFrame
+from numpy import timedelta64
+from pandas import read_csv, DataFrame, to_datetime
 
-project_folder = r'/gpfs2/scratch/tcbarret/downloader/all_states_20220207'
-# project_folder = r'E:\USGS_Downloader\test_set_of_states_just_after_download'
-output_folder = r'/gpfs2/scratch/tcbarret/downloader'
-# output_folder = r'E:\USGS_Downloader'
+# project_folder = r'/gpfs2/scratch/tcbarret/downloader/all_states_20220207'
+project_folder = r'E:\USGS_Downloader\test_slurm_runs\debug_set'
+# output_folder = r'/gpfs2/scratch/tcbarret/downloader'
+output_folder = r'E:\USGS_Downloader\test_slurm_runs'
 
 project_path = Path(project_folder)
 project_name = project_path.parts[-1]
@@ -34,6 +35,10 @@ combined_df.loc[combined_df['ClipFileSize'] < 0.1, 'ClipFileSizeCat'] = 'EmptyFi
 combined_df.loc[(combined_df['ClipFileSize'] > 0.1) & (combined_df['ClipFileSize'] <= 1000),
                 'ClipFileSizeCat'] = 'SmallFile'
 combined_df.loc[combined_df['ClipFileSize'] > 1000, 'ClipFileSizeCat'] = 'CandidateFile'
+
+combined_df['MonthDelta'] = (to_datetime(combined_df['avedate'])
+                             - to_datetime(combined_df['measdate'])).apply(abs) \
+                            / timedelta64(1, 'M')
 
 print(f'Total records: {len(combined_df)}')
 print(f'Categories: \n{combined_df["ClipFileSizeCat"].value_counts()}')
