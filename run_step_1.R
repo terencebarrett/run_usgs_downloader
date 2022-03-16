@@ -196,8 +196,10 @@ real_pts_sf$measdate <- make_date(real_pts_sf$MEASYEAR, real_pts_sf$MEASMON, rea
 
 # we only want plots measured within +- some time interval
 # changed from 18 months to 30 months 2/24/2022
-old_dateHalfRange <- years(1) + months(6)
-dateHalfRange <- years(2) + months(6)
+# old_dateHalfRange <- years(1) + months(6)
+old_dateHalfRange <- years(2) + months(6)
+# dateHalfRange <- years(2) + months(6)
+dateHalfRange <- years(5) + months(0)
 
 # flag to control filtering behavior...
 #   if TRUE, target plots and pts will include all plots in the new date range
