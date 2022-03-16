@@ -3,10 +3,11 @@ from pathlib import Path
 from numpy import timedelta64
 from pandas import read_csv, DataFrame, to_datetime
 
-# project_folder = r'/gpfs2/scratch/tcbarret/downloader/all_states_20220207'
-project_folder = r'E:\USGS_Downloader\test_slurm_runs\debug_set'
-# output_folder = r'/gpfs2/scratch/tcbarret/downloader'
-output_folder = r'E:\USGS_Downloader\test_slurm_runs'
+project_folder = r'/gpfs2/scratch/tcbarret/completed_downloader_runs/all_states_20220207_0_to_18_months'
+# project_folder = r'/gpfs2/scratch/tcbarret/completed_downloader_runs/all_states_20220315_18_to_30_months'
+# project_folder = r'E:\USGS_Downloader\test_slurm_runs\debug_set'
+output_folder = r'/gpfs2/scratch/tcbarret/completed_downloader_runs'
+# output_folder = r'E:\USGS_Downloader\test_slurm_runs'
 
 project_path = Path(project_folder)
 project_name = project_path.parts[-1]
